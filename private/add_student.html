@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Add Student</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fill the details</h1>
+
+  <form id="addStudentForm">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="course">Course</label>
+    <select id="course" name="course" required>
+      <option value="">Select a course</option>
+      <option value="Python">Python</option>
+      <option value="Java">Java</option>
+      <option value="AI/ML">AI/ML</option>
+      <option value="MERN">MERN</option>
+    </select>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="phone">Phone</label>
+    <input type="tel" id="phone" name="phone" required />
+
+    <button type="submit">Add Student</button>
+  </form>
+
+  <p><a href="view_students.html" style="color: #007bff; text-decoration: none; font-size: 16px; font-weight: 600; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px;">
+  View Students List
+</a>
+</p>
+
+  <script>
+    const form = document.getElementById("addStudentForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const studentData = {
+        name: form.name.value,
+        course: form.course.value,
+        email: form.email.value,
+        phone: form.phone.value,
+      };
+
+      try {
+        const res = await fetch("/students", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(studentData),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(data.message);
+          form.reset();
+        } else {
+          alert("Error: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Network Error: " + err.message);
+      }
+    });
+    //working
+    window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const course = params.get('course');
+    if (course) {
+      const select = document.getElementById('course');
+      select.value = course;
+    }
+  });
+  </script>
+</body>
+</html>

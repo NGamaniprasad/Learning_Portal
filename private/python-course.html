@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Python Course</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 40px;
+      text-align: center;
+    }
+    .topic-container {
+      display: none;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+    .active {
+      display: block;
+    }
+    h2 {
+      color: #306998;
+    }
+    pre {
+      background: #eee;
+      text-align: left;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #306998;
+    }
+    .next-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: #306998;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐍 Python Course</h1>
+
+  <div class="topic-container active">
+    <h2>1. Introduction to Python</h2>
+    <p>Python is a high-level, interpreted programming language known for its simplicity and readability.</p>
+    <p><strong>Syntax:</strong></p>
+    <pre>print("Hello, Python!")</pre>
+    <p><strong>Sample Code:</strong></p>
+    <pre>
+# This is a comment
+print("Welcome to Python programming!")
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>2. Variables and Data Types</h2>
+    <p>Variables store data values. Python has various data types like int, float, string, list, etc.</p>
+    <p><strong>Syntax:</strong></p>
+    <pre>x = 5
+name = "Alice"
+pi = 3.14</pre>
+    <p><strong>Sample Code:</strong></p>
+    <pre>
+age = 25
+height = 5.9
+name = "John"
+print("Name:", name)
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>3. Control Flow (if/else)</h2>
+    <p>Control structures like if, elif, else are used for decision-making.</p>
+    <p><strong>Syntax:</strong></p>
+    <pre>
+if condition:
+    # code
+elif another_condition:
+    # code
+else:
+    # code
+    </pre>
+    <p><strong>Sample Code:</strong></p>
+    <pre>
+age = 18
+if age >= 18:
+    print("You are an adult")
+else:
+    print("You are a minor")
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>4. Loops (for/while)</h2>
+    <p>Loops are used to execute a block of code repeatedly.</p>
+    <p><strong>Syntax:</strong></p>
+    <pre>
+for i in range(5):
+    print(i)
+
+while condition:
+    print("Looping...")
+    </pre>
+    <p><strong>Sample Code:</strong></p>
+    <pre>
+for i in range(3):
+    print("Iteration", i)
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>✅ Course Completed!</h2>
+    <p>Congratulations! You’ve completed the course.</p>
+    <button class="next-btn" onclick="goToCertificate()">Get Certificate</button>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextTopic()">Next</button>
+
+  <script>
+    let current = 0;
+    const topics = document.querySelectorAll('.topic-container');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function nextTopic() {
+      if (current < topics.length - 1) {
+        topics[current].classList.remove('active');
+        current++;
+        topics[current].classList.add('active');
+
+        // Hide Next button if we're now on the last topic
+        if (current === topics.length - 1) {
+          nextBtn.style.display = 'none';
+        }
+      }
+    }
+
+    function goToCertificate() {
+      const courseName = document.title.replace(" Course", "");
+      window.location.href = `certificate.html?course=${encodeURIComponent(courseName)}`;
+    }
+  </script>
+</body>
+</html>

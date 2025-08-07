@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>View Attendance</title>
+  <link rel="stylesheet" href="Present.css" />
+
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    input, button { margin-top: 20px; padding: 8px; font-size: 16px; }
+    #summary { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Attendance Records</h1>
+
+  <input type="email" id="emailInput" placeholder="Enter email to calculate attendance" />
+  <button onclick="calculateAttendance()">Check Attendance Summary</button>
+  <p id="summary"></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Queries</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceBody"></tbody>
+  </table>
+
+  <script>
+    async function loadAttendance() {
+      try {
+        const res = await fetch('/attendance');
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Expected an array');
+
+        const tbody = document.getElementById('attendanceBody');
+        tbody.innerHTML = '';
+
+        data.forEach(record => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${record.name}</td>
+            <td>${record.email}</td>
+            <td>${record.date}</td>
+            <td>${record.status}</td>
+            <td>${record.queries || ''}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (err) {
+        alert('Error loading attendance: ' + err.message);
+      }
+    }
+
+    async function calculateAttendance() {
+      const email = document.getElementById('emailInput').value;
+      const summary = document.getElementById('summary');
+
+      if (!email) {
+        summary.textContent = 'Please enter an email address.';
+        return;
+      }
+
+      try {
+        const res = await fetch('/attendance');
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Expected an array');
+
+        const records = data.filter(r => r.email === email);
+        const presentDays = records.filter(r => r.status.toLowerCase() === 'present').length;
+        const absentDays = records.filter(r => r.status.toLowerCase() === 'absent').length;
+
+        summary.textContent = `${email} — Present: ${presentDays} day(s), Absent: ${absentDays} day(s).`;
+      } catch (err) {
+        summary.textContent = 'Error: ' + err.message;
+      }
+    }
+
+    window.onload = loadAttendance;
+    //update and delete
+    async function updateAttendance() {
+  const email = document.getElementById('editEmail').value;
+  const date = document.getElementById('editDate').value;
+  const status = document.getElementById('editStatus').value;
+  const queries = document.getElementById('editQueries').value;
+  const msg = document.getElementById('editMsg');
+
+  try {
+    const res = await fetch('/attendance', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, date, status, queries }),
+    });
+
+    const data = await res.json();
+    msg.textContent = data.message || data.error;
+    loadAttendance();
+  } catch (err) {
+    msg.textContent = 'Error updating: ' + err.message;
+  }
+}
+
+
+
+async function deleteAttendance() {
+    const email = document.getElementById('editEmail').value.trim();
+    const date = document.getElementById('editDate').value.trim();
+    const msg = document.getElementById('editMsg');
+
+    if (!email || !date) {
+      msg.textContent = 'Email and date are required.';
+      return;
+    }
+
+    try {
+      const res = await fetch('/attendance', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, date }),
+      });
+
+      const data = await res.json();
+      msg.textContent = data.message || data.error;
+
+      // Reload attendance records after delete
+      loadAttendance();
+    } catch (err) {
+      msg.textContent = 'Error deleting: ' + err.message;
+    }
+  }
+
+  </script>
+  <h2>Update/Delete Attendance by Email</h2>
+
+<input type="email" id="editEmail" placeholder="Enter email" />
+<input type="text" id="editDate" placeholder="New date (e.g. 2025-07-15)" />
+<input type="text" id="editStatus" placeholder="New status (Present/Absent)" />
+<input type="text" id="editQueries" placeholder="New queries (optional)" />
+<br>
+<button onclick="updateAttendance()">Update</button>
+<button onclick="deleteAttendance()">Delete</button>
+
+<p id="editMsg" style="font-weight: bold; margin-top: 10px;"></p>
+<a href="/api/logout" style="display: inline-block; padding: 8px 16px; background-color: #ff4d4d; color: white; text-decoration: none; 
+border-radius: 4px; font-weight: bold;">Logout</a>
+</body>
+</html>

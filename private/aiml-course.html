@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>AI / ML Course</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 40px;
+      background: #f0f8ff;
+    }
+    .topic-container {
+      display: none;
+      background: white;
+      padding: 30px;
+      margin: auto;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    .active {
+      display: block;
+    }
+    h2 {
+      color: #0b6e99;
+    }
+    pre {
+      background: #eee;
+      text-align: left;
+      padding: 10px;
+      border-left: 4px solid #0b6e99;
+      overflow-x: auto;
+    }
+    .next-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background: #0b6e99;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    ul {
+      text-align: left;
+      max-width: 600px;
+      margin: auto;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 AI / ML Course</h1>
+
+  <div class="topic-container active">
+    <h2>1. What is AI & ML?</h2>
+    <p>Artificial Intelligence (AI) simulates human intelligence. Machine Learning (ML) is a subset of AI that enables systems to learn from data.</p>
+    <pre>
+AI ➜ Smart behavior
+ML ➜ Learning from data without being explicitly programmed
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>2. Types of ML</h2>
+    <p>Machine Learning is categorized into:</p>
+    <ul>
+      <li>✔️ Supervised Learning</li>
+      <li>✔️ Unsupervised Learning</li>
+      <li>✔️ Reinforcement Learning</li>
+    </ul>
+    <pre>
+# Example of supervised learning:
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>3. Data Preprocessing</h2>
+    <p>Preparing data is a critical step in ML. It includes handling missing values, scaling, and encoding.</p>
+    <pre>
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>4. Building a Simple Model</h2>
+    <p>Train and test a model using Scikit-Learn.</p>
+    <pre>
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+print("Accuracy:", accuracy)
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>✅ Course Completed!</h2>
+    <p>🎉 Congratulations! You’ve completed the course.</p>
+    <button class="next-btn" onclick="goToCertificate()">Get Certificate</button>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextTopic()">Next</button>
+
+  <script>
+    let current = 0;
+    const topics = document.querySelectorAll('.topic-container');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function nextTopic() {
+      if (current < topics.length - 1) {
+        topics[current].classList.remove('active');
+        current++;
+        topics[current].classList.add('active');
+
+        if (current === topics.length - 1) {
+          nextBtn.style.display = 'none';
+        }
+      }
+    }
+
+    function goToCertificate() {
+      const courseName = document.title.replace(" Course", "");
+      window.location.href = `certificate.html?course=${encodeURIComponent(courseName)}`;
+    }
+  </script>
+</body>
+</html>

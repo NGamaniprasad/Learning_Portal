@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <input type="email" name="email" placeholder="Email" required /><br/>
+    <input type="password" name="password" placeholder="Password" required /><br/>
+    <button type="submit">Login</button>
+  </form>
+
+  <div class="signup-link">
+    Don't have an account? <a href="signup.html">Sign Up</a>
+  </div>
+
+  <script>
+    // document.getElementById('loginForm').addEventListener('submit', async e => {
+    //   e.preventDefault();
+    //   const formData = new FormData(e.target);
+    //   const data = {
+    //     email: formData.get('email'),
+    //     password: formData.get('password'),
+    //   };
+
+    //   try {
+    //     const res = await fetch('/api/login', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify(data)
+    //     });
+    //     const result = await res.json();
+    //     if (res.ok) {
+    //       alert(result.message);
+    //       localStorage.setItem('user', JSON.stringify(result.user));
+    //       window.location.href = 'courses.html';
+    //     } else {
+    //       alert(result.error || result.message);
+    //     }
+    //   } catch {
+    //     alert('Server error, try again later.');
+    //   }
+    // });
+
+     document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = {
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(result.message);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        window.location.href = '/private/courses.html'; // ✅ FIXED path
+      } else {
+        alert(result.error || 'Login failed');
+      }
+    } catch (err) {
+      alert('Server error, try again later.');
+    }
+  });
+  </script>
+  <style>
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      flex-direction: column;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+      background: #0056b3;
+      outline: none;
+    }
+
+    .signup-link {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .signup-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .signup-link a:hover,
+    .signup-link a:focus {
+      color: #0056b3;
+      outline: none;
+      text-decoration: underline;
+    }
+  </style>
+</body>
+</html>

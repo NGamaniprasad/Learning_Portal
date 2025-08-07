@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>LMS Portal - Start Learning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .course-btn {
+      padding: 15px 30px;
+      margin: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+    .python { background-color: #306998; }
+    .java { background-color: #b07219; }
+    .mern { background-color: #3c3c3c; }
+    .aiml { background-color: #0b6e99; } /* New AI/ML button style */
+  </style>
+</head>
+<body>
+  <h1>Please choose you selected course</h1>
+  <button class="course-btn python" onclick="goToCourse('python')">Learn Python</button>
+  <button class="course-btn java" onclick="goToCourse('java')">Learn Java</button>
+  <button class="course-btn mern" onclick="goToCourse('mern')">Learn MERN Stack</button>
+  <button class="course-btn aiml" onclick="goToCourse('aiml')">Learn AI / ML</button> <!-- New Button -->
+
+  <script>
+    function goToCourse(course) {
+      window.location.href = `${course}-course.html`;
+    }
+  </script>
+</body>
+</html>

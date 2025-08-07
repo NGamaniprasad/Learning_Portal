@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Sign Up</title>
+</head>
+<body>
+  <div>
+    <h1>Sign Up</h1>
+    
+    <form id="signupForm">
+  <input type="text" name="username" id="username" placeholder="Username" required />
+  <input type="email" name="email" id="email" placeholder="Email" required />
+  <input type="password" name="password" id="password" placeholder="Password" required />
+  
+ <label style="display: flex; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 15px; color: #333; margin-top: 12px;">
+  <input type="checkbox" id="agree" style="width: 16px; height: 16px; margin-right: 10px; cursor: pointer;" />
+  <span>
+    I agree to the 
+    <a href="terms.html" target="_blank" style="color: #007BFF; text-decoration: none; margin-left: 4px; cursor: pointer;">
+      Terms and Conditions
+    </a>
+  </span>
+</label>
+
+  <button type="submit">Sign Up</button>
+</form>
+
+<div id="error" style="color: red; margin-top: 10px;"></div>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    
+    document.getElementById('signupForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = {
+      username: formData.get('username'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      alert(result.message || result.error);
+
+      if (res.ok) {
+        window.location.href = '/login.html'; // ✅ redirect after successful signup
+      }
+    } catch (err) {
+      alert('Server error, try again later.');
+    }
+  });
+  //validations
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const agree = document.getElementById('agree').checked;
+
+  const errorDiv = document.getElementById('error');
+  errorDiv.innerText = '';
+
+  if (username.length < 3) {
+    errorDiv.innerText = 'Username must be at least 3 characters long.';
+    return;
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    errorDiv.innerText = 'Please enter a valid email address.';
+    return;
+  }
+
+  const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+  if (!passwordPattern.test(password)) {
+    errorDiv.innerText = 'Password must be at least 6 characters and include a number and a special character.';
+    return;
+  }
+
+  if (!agree) {
+    errorDiv.innerText = 'You must agree to the Terms and Conditions.';
+    return;
+  }
+
+  
+  window.location.href = 'login.html';
+});
+  </script>
+  <style>
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+      background: #0056b3;
+      outline: none;
+    }
+
+    .login-link {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .login-link a:hover,
+    .login-link a:focus {
+      color: #0056b3;
+      outline: none;
+    }
+  </style>
+</body>
+</html>

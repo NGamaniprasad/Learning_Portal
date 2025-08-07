@@ -1,0 +1,35 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Login</title>
+</head>
+<body>
+  <h2>Student Login</h2>
+  <form onsubmit="login(event)">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
+  <script>
+    async function login(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/secure-users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message);
+        location.href = "/secure_dashboard.html";
+      } else {
+        alert(data.error);
+      }
+    }
+  </script>
+</body>
+</html> -->

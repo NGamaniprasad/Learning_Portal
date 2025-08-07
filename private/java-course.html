@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Java Course</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    .topic-container {
+      display: none;
+      background: white;
+      padding: 30px;
+      margin: auto;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    .active {
+      display: block;
+    }
+    h2 {
+      color: #b07219;
+    }
+    pre {
+      background: #eee;
+      text-align: left;
+      padding: 10px;
+      border-left: 4px solid #b07219;
+      overflow-x: auto;
+    }
+    .next-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background: #b07219;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>☕ Java Course</h1>
+
+  <div class="topic-container active">
+    <h2>1. Introduction to Java</h2>
+    <p>Java is a high-level, object-oriented programming language used for building robust applications.</p>
+    <pre>
+public class HelloWorld {
+  public static void main(String[] args) {
+    System.out.println("Hello, Java!");
+  }
+}
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>2. Variables and Data Types</h2>
+    <p>Java supports various data types like int, float, String, boolean, etc.</p>
+    <pre>
+int age = 25;
+String name = "Alice";
+float price = 99.99f;
+boolean isJavaFun = true;
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>3. Control Statements (if/else)</h2>
+    <p>Used to control the flow of execution based on conditions.</p>
+    <pre>
+int marks = 85;
+if (marks >= 90) {
+  System.out.println("Grade A");
+} else {
+  System.out.println("Grade B");
+}
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>4. Loops (for/while)</h2>
+    <p>Used for executing a block of code repeatedly.</p>
+    <pre>
+for (int i = 0; i < 5; i++) {
+  System.out.println("Loop " + i);
+}
+
+int j = 0;
+while (j < 3) {
+  System.out.println("While loop " + j);
+  j++;
+}
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>✅ Course Completed!</h2>
+    <p>Congratulations! You’ve completed the course.</p>
+    <button class="next-btn" onclick="goToCertificate()">Get Certificate</button>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextTopic()">Next</button>
+
+  <script>
+    let current = 0;
+    const topics = document.querySelectorAll('.topic-container');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function nextTopic() {
+      if (current < topics.length - 1) {
+        topics[current].classList.remove('active');
+        current++;
+        topics[current].classList.add('active');
+
+        if (current === topics.length - 1) {
+          nextBtn.style.display = 'none';
+        }
+      }
+    }
+
+    function goToCertificate() {
+      const courseName = document.title.replace(" Course", "");
+      window.location.href = `certificate.html?course=${encodeURIComponent(courseName)}`;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Generator</title>
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #f4f4f4;
+      padding: 30px;
+      text-align: center;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    input, label {
+      width: 100%;
+      font-size: 15px;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2e86de;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .certificate {
+      display: none;
+      background: white;
+      border: 12px solid #6c757d;
+      border-radius: 15px;
+      padding: 5vw;
+      margin: 5vw auto;
+      width: 90vw;
+      max-width: 850px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .cert-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2e86de;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 100px;
+    }
+
+    h2, h3 {
+      color: #000;
+    }
+
+    .info {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .cert-title {
+        font-size: 24px;
+      }
+
+      .info {
+        font-size: 14px;
+      }
+
+      h2, h3 {
+        font-size: 18px;
+      }
+
+      .logo {
+        width: 70px;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎓 Certificate Generator</h1>
+
+  <form onsubmit="generateCertificate(); return false;">
+    <label>Full Name</label>
+    <input id="name" required>
+
+    <label>Course Name</label>
+    <input id="course" required>
+
+    <label>Start Date</label>
+    <input type="date" id="start" required>
+
+    <label>End Date</label>
+    <input type="date" id="end" required>
+
+    <label>Certificate ID</label>
+    <input id="certId" required>
+
+    <label>Issued By</label>
+    <input id="issuer" required>
+
+    <button type="submit" class="btn">Generate Certificate</button>
+  </form>
+
+  <div id="certificate" class="certificate">
+    <img src="LMS_LOGO.png" class="logo" id="logo">
+    <h1 class="cert-title">Certificate of Completion</h1>
+    <p class="info">This certifies that</p>
+    <h2 id="certName"></h2>
+    <p class="info">has completed the course</p>
+    <h3 id="certCourse"></h3>
+    <p class="info">From <span id="certStart"></span> to <span id="certEnd"></span></p>
+    <p class="info">Certificate ID: <strong id="certID"></strong></p>
+    <p class="info">Issued By: <strong id="certIssuer"></strong></p>
+  </div>
+
+  <div id="downloadBtns" style="display: none;">
+    <button class="btn" onclick="downloadPDF()">Download PDF</button>
+    <button class="btn" onclick="downloadImage()">Download Image</button>
+  </div>
+
+  <script>
+    async function generateCertificate() {
+      document.getElementById("certName").innerText = document.getElementById("name").value;
+      document.getElementById("certCourse").innerText = document.getElementById("course").value;
+      document.getElementById("certStart").innerText = document.getElementById("start").value;
+      document.getElementById("certEnd").innerText = document.getElementById("end").value;
+      document.getElementById("certID").innerText = document.getElementById("certId").value;
+      document.getElementById("certIssuer").innerText = document.getElementById("issuer").value;
+
+      const cert = document.getElementById("certificate");
+      cert.style.display = "block";
+
+      const img = document.getElementById("logo");
+      if (!img.complete) {
+        await new Promise(resolve => img.onload = resolve);
+      }
+
+      document.getElementById("downloadBtns").style.display = "block";
+      cert.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function downloadPDF() {
+      const cert = document.getElementById("certificate");
+
+      // Force consistent desktop size for PDF export
+      cert.style.width = "850px";
+      cert.style.maxWidth = "850px";
+
+      const canvas = await html2canvas(cert, { scale: 2 });
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('landscape', 'pt', 'a4');
+
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+      pdf.addImage(imgData, 'JPEG', 0, 20, width, height);
+
+      const fullName = document.getElementById("name").value.trim().replace(/\s+/g, '_');
+      const courseName = document.getElementById("course").value.trim().replace(/\s+/g, '_');
+      pdf.save(`${courseName}-${fullName}.pdf`);
+
+      // Reset styling
+      cert.style.width = "";
+      cert.style.maxWidth = "";
+    }
+
+    async function downloadImage() {
+      const cert = document.getElementById("certificate");
+
+      // Force consistent desktop size
+      cert.style.width = "850px";
+      cert.style.maxWidth = "850px";
+
+      const canvas = await html2canvas(cert, { scale: 2 });
+      const link = document.createElement("a");
+      const fullName = document.getElementById("name").value.trim().replace(/\s+/g, '_');
+      const courseName = document.getElementById("course").value.trim().replace(/\s+/g, '_');
+      link.download = `${courseName}-${fullName}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+      // Reset styling
+      cert.style.width = "";
+      cert.style.maxWidth = "";
+    }
+  </script>
+
+  <br><br>
+  <a href="/api/logout"
+     style="display: inline-block; padding: 8px 16px; background-color: #ff4d4d; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+     Logout
+  </a>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Courses & Roadmaps</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    h1 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .courses-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    @media (min-width: 700px) {
+      .courses-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .course {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 25px 30px;
+      transition: box-shadow 0.3s ease;
+    }
+    .course:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .course h2 {
+      margin-top: 0;
+      color: #004085;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 6px;
+    }
+    .course .details {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    .roadmap ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+    .roadmap li {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Our Courses & Roadmaps</h1>
+  <p>Choose your path and start learning step-by-step</p>
+</header>
+
+<main class="courses-container">
+
+  <section class="course">
+    <h2>Python Full Stack</h2>
+    <div class="details">Duration: 6 months | Fee: ₹30,000</div>
+    <ul>
+      <li>Python Basics: syntax, variables, loops, functions</li>
+      <li>Object-Oriented Programming (OOP)</li>
+      <li>Web Development with Django & Flask</li>
+      <li>Databases: SQL, ORM</li>
+      <li>REST API development</li>
+      <li>Frontend basics: HTML, CSS, JavaScript</li>
+      <li>Deployment & Version control (Git/GitHub)</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <h2>Java Full Stack</h2>
+    <div class="details">Duration: 6-8 months | Fee: ₹37,000</div>
+    <ul>
+      <li>Java Core: syntax, OOP, exceptions</li>
+      <li>Collections and Streams API</li>
+      <li>Spring Framework: Spring Boot, MVC, Security</li>
+      <li>REST API with Spring</li>
+      <li>Frontend: JSP, Thymeleaf, or Angular/React basics</li>
+      <li>Database: MySQL/PostgreSQL and JPA/Hibernate</li>
+      <li>Build tools: Maven/Gradle</li>
+      <li>Testing & Deployment</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <h2>AI / Machine Learning</h2>
+    <div class="details">Duration: 6-8 months | Fee: ₹35,000</div>
+    <ul>
+      <li>Python for Data Science</li>
+      <li>Mathematics: Linear Algebra, Probability, Statistics</li>
+      <li>Data preprocessing and visualization</li>
+      <li>Machine Learning algorithms: Regression, Classification, Clustering</li>
+      <li>Deep Learning basics: Neural Networks, TensorFlow/PyTorch</li>
+      <li>Natural Language Processing & Computer Vision</li>
+      <li>Model deployment and real-world applications</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <h2>MERN Stack</h2>
+    <div class="details">Duration: 5-6 months | Fee: ₹27,000</div>
+    <ul>
+      <li>JavaScript fundamentals: ES6+, async programming</li>
+      <li>Frontend: React.js basics and hooks</li>
+      <li>State management: Redux or Context API</li>
+      <li>Backend: Node.js and Express.js</li>
+      <li>Database: MongoDB & Mongoose</li>
+      <li>Authentication & Authorization (JWT, OAuth)</li>
+      <li>API design & RESTful services</li>
+      <li>Deployment with Heroku, Netlify, or Vercel</li>
+    </ul>
+  </section>
+
+</main>
+
+
+</body>
+</html>

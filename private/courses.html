@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>Select Your Course - Learning Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    label:hover {
+      background-color: #f0f8ff;
+    }
+    input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 150px;
+      align-self: center;
+    }
+    button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Choose Your Course</h2>
+
+  <form id="courseForm">
+    <label>
+      <input type="radio" name="course" value="Python" />
+      Python Mastery (6 months, ₹30,000)
+    </label>
+
+    <label>
+      <input type="radio" name="course" value="Java" />
+      Java Programming (6-8 months, ₹37,000)
+    </label>
+
+    <label>
+      <input type="radio" name="course" value="AI/ML" />
+      AI & Machine Learning (6-8 months, ₹35,000)
+    </label>
+
+    <label>
+      <input type="radio" name="course" value="MERN" />
+      Full Stack (MERN) (5-6 months, ₹27,000)
+    </label>
+
+    <button type="submit" disabled>Next</button>
+    <p><a href="view_students.html" style="color: #007bff; text-decoration: none; font-size: 16px; font-weight: 600; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px;">
+  View Students List
+</a>
+  </form>
+
+  <script>
+    const form = document.getElementById('courseForm');
+    const nextBtn = form.querySelector('button');
+    
+    form.addEventListener('change', () => {
+      // Enable Next button only if a course is selected
+      const selected = form.course.value;
+      nextBtn.disabled = !selected;
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const selectedCourse = form.course.value;
+      if (!selectedCourse) return;
+
+      // Redirect to data.html with selected course as query parameter
+      // window.location.href 
+      // = `data.html?course=${encodeURIComponent(selectedCourse)}`;
+      window.location.href = `add_student.html?course=${encodeURIComponent(selectedCourse)}`;
+
+    });
+  </script>
+
+</body>
+</html> 
+

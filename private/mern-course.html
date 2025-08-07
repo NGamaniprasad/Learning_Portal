@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="LMS_LOGO.png">
+  <title>MERN Stack Course</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    .topic-container {
+      display: none;
+      background: white;
+      padding: 30px;
+      margin: auto;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    .active {
+      display: block;
+    }
+    h2 {
+      color: #3c3c3c;
+    }
+    pre {
+      background: #eee;
+      text-align: left;
+      padding: 10px;
+      border-left: 4px solid #3c3c3c;
+      overflow-x: auto;
+    }
+    .next-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background: #3c3c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌐 MERN Stack Course</h1>
+
+  <div class="topic-container active">
+    <h2>1. What is MERN?</h2>
+    <p>MERN stands for MongoDB, Express.js, React.js, and Node.js – a full-stack JavaScript framework.</p>
+    <pre>MongoDB + Express + React + Node = MERN</pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>2. Node.js & Express Basics</h2>
+    <p>Express.js is a web framework built on Node.js used for backend development.</p>
+    <pre>
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => res.send('Hello from Express'));
+app.listen(3000);
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>3. React.js Introduction</h2>
+    <p>React is a JavaScript library used for building user interfaces.</p>
+    <pre>
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Welcome to React&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>4. MongoDB Overview</h2>
+    <p>MongoDB is a NoSQL database that stores data in JSON-like documents.</p>
+    <pre>
+// MongoDB document example
+{
+  "name": "John",
+  "age": 30,
+  "role": "developer"
+}
+    </pre>
+  </div>
+
+  <div class="topic-container">
+    <h2>✅ Course Completed!</h2>
+    <p>Congratulations! You’ve completed the course.</p>
+    <button class="next-btn" onclick="goToCertificate()">Get Certificate</button>
+  </div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextTopic()">Next</button>
+
+  <script>
+    let current = 0;
+    const topics = document.querySelectorAll('.topic-container');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function nextTopic() {
+      if (current < topics.length - 1) {
+        topics[current].classList.remove('active');
+        current++;
+        topics[current].classList.add('active');
+        
+        // Hide the Next button when reaching the last topic
+        if (current === topics.length - 1) {
+          nextBtn.style.display = 'none';
+        }
+      }
+    }
+
+    function goToCertificate() {
+      const courseName = document.title.replace(" Course", "");
+      window.location.href = `certificate.html?course=${encodeURIComponent(courseName)}`;
+    }
+  </script>
+
+</body>
+</html>

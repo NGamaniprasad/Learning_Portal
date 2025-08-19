@@ -1,4 +1,4 @@
-
+<!-- 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -311,5 +311,328 @@
   </script>
   <button onclick="changePassword()">Change Password</button>
 
+</body>
+</html>
+ -->
+
+
+
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>View Students</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #007bff; color: white; }
+    button, a.button-link {
+      cursor: pointer;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      margin-right: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-block;
+      color: white;
+      background-color: #007bff;
+    }
+    button:hover, a.button-link:hover { background-color: #0056b3; }
+    .delete-btn { background-color: #dc3545; }
+    .delete-btn:hover { background-color: #a71d2a; }
+    .update-btn { background-color: #28a745; }
+    .update-btn:hover { background-color: #19692c; }
+    .save-btn { background-color: #007bff; }
+    .save-btn:hover { background-color: #0056b3; }
+    .cancel-btn { background-color: #6c757d; }
+    .cancel-btn:hover { background-color: #494f54; }
+    input, select { font-size: 14px; padding: 5px; width: 100%; box-sizing: border-box; }
+    .button-container { margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Students List</h1>
+
+  <!-- Admin-only buttons -->
+  <div class="button-container" id="adminButtons" style="display: none;">
+    <a href="add_student.html" class="button-link">Add New Student</a>
+    <a href="attendence.html" class="button-link">Mark Attendance</a>
+  </div>
+
+  <!-- Visible to everyone -->
+  <div class="button-container">
+    <button onclick="promptAccess()">Login as Admin or Student</button>
+    <button onclick="generateStudentPassword()">Generate Password (Students)</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="studentsTableBody"></tbody>
+  </table>
+
+  <br><br>
+  <a href="/api/logout" 
+     style="display: inline-block; padding: 8px 16px; background-color: #ff4d4d; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+     Logout
+  </a>
+
+  <script>
+    let students = [];
+    let editingId = null;
+    let isAdmin = false;
+    let isStudent = false;
+    let currentUserEmail = null;
+
+    const ADMIN_PASSWORD = "Gamani@505891"; // your admin password
+
+    // Prompt login for admin or student
+    async function promptAccess() {
+      const role = prompt("Are you 'admin' or 'student'?");
+      if (!role) return;
+
+      const password = prompt(`Enter ${role} password:`);
+
+      if (role.toLowerCase() === "admin") {
+        if (password === ADMIN_PASSWORD) {
+          isAdmin = true;
+          isStudent = false;
+          currentUserEmail = null;
+          document.getElementById("adminButtons").style.display = "block"; // show admin-only buttons
+          alert("Admin access granted. You can manage all students.");
+          renderTable();
+        } else {
+          alert("Incorrect admin password.");
+        }
+      } else if (role.toLowerCase() === "student") {
+        const email = prompt("Enter your email:");
+        if (!email || !password) {
+          alert("Email and password are required.");
+          return;
+        }
+
+        try {
+          const res = await fetch("/secure-users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            isStudent = true;
+            isAdmin = false;
+            currentUserEmail = email.toLowerCase();
+            document.getElementById("adminButtons").style.display = "none"; // keep hidden
+            alert("Student access granted.");
+            renderTable();
+          } else {
+            alert("Login failed: " + data.error);
+          }
+        } catch (err) {
+          alert("Login error: " + err.message);
+        }
+      } else {
+        alert("Invalid role. Type 'admin' or 'student'.");
+      }
+    }
+
+    // Load students from server
+    async function loadStudents() {
+      try {
+        const res = await fetch("/students");
+        students = await res.json();
+        renderTable();
+      } catch (err) {
+        alert("Failed to load students: " + err.message);
+      }
+    }
+
+    // Render table rows with permissions
+    function renderTable() {
+      const tbody = document.getElementById("studentsTableBody");
+      tbody.innerHTML = "";
+
+      students.forEach(student => {
+        const tr = document.createElement("tr");
+        const canEdit = isAdmin || (isStudent && currentUserEmail === student.email.toLowerCase());
+
+        if (editingId === student._id && canEdit) {
+          tr.innerHTML = `
+            <td><input type="text" id="edit-name" value="${student.name}" /></td>
+            <td>
+              <select id="edit-course">
+                <option value="Python" ${student.course === "Python" ? "selected" : ""}>Python</option>
+                <option value="Java" ${student.course === "Java" ? "selected" : ""}>Java</option>
+                <option value="AI/ML" ${student.course === "AI/ML" ? "selected" : ""}>AI/ML</option>
+                <option value="MERN" ${student.course === "MERN" ? "selected" : ""}>MERN</option>
+              </select>
+            </td>
+            <td><input type="email" id="edit-email" value="${student.email}" /></td>
+            <td><input type="tel" id="edit-phone" value="${student.phone}" /></td>
+            <td>
+              <button onclick="saveStudent('${student._id}')" class="save-btn">Save</button>
+              <button onclick="cancelEdit()" class="cancel-btn">Cancel</button>
+            </td>
+          `;
+        } else {
+          const courseFile = student.course.toLowerCase().replace(/[^a-z]/g, "") + "-course.html";
+
+          tr.innerHTML = `
+            <td>${student.name}</td>
+            <td>${student.course}</td>
+            <td>${student.email}</td>
+            <td>${student.phone}</td>
+            <td>
+              ${canEdit ? `
+                <button onclick="editStudent('${student._id}')" class="update-btn">Update</button>
+                ${isAdmin ? `<button onclick="deleteStudent('${student._id}')" class="delete-btn">Delete</button>` : ""}
+              ` : ""}
+              ${(isStudent && currentUserEmail === student.email.toLowerCase()) ? `
+                <a href="${courseFile}" style="text-decoration: none; padding: 8px 12px; background-color: #0b6e99; color: white; border-radius: 6px;">Start Course</a>
+              ` : ""}
+            </td>
+          `;
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function editStudent(id) {
+      editingId = id;
+      renderTable();
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      renderTable();
+    }
+
+    async function saveStudent(id) {
+      const name = document.getElementById("edit-name").value.trim();
+      const course = document.getElementById("edit-course").value;
+      const email = document.getElementById("edit-email").value.trim();
+      const phone = document.getElementById("edit-phone").value.trim();
+
+      if (!name || !course || !email || !phone) {
+        alert("All fields are required!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/students/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, course, email, phone })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert(data.message);
+          editingId = null;
+          loadStudents();
+        } else {
+          alert("Error: " + data.error);
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    async function deleteStudent(id) {
+      if (!confirm("Are you sure you want to delete this student?")) return;
+      try {
+        const res = await fetch(`/students/${id}`, { method: "DELETE" });
+        const data = await res.json();
+        if (res.ok) {
+          alert(data.message);
+          loadStudents();
+        } else {
+          alert("Error: " + data.error);
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // Generate password for student
+    async function generateStudentPassword() {
+      const email = prompt("Enter your email:");
+      const name = prompt("Enter your name:");
+
+      if (!email || !name) {
+        alert("Both email and name are required!");
+        return;
+      }
+
+      try {
+        const res = await fetch("/secure-users/generate-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, name })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert(data.message);
+        } else {
+          alert("Error: " + data.error);
+        }
+      } catch (err) {
+        alert("Failed: " + err.message);
+      }
+    }
+
+    // Change password
+    async function changePassword() {
+      const email = prompt("Enter your email:");
+      const oldPassword = prompt("Enter your old password:");
+      const newPassword = prompt("Enter your new password:");
+
+      if (!email || !oldPassword || !newPassword) {
+        alert("All fields are required.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/secure-users/change-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.toLowerCase(),
+            oldPassword,
+            newPassword
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message || "Password updated successfully!");
+        } else {
+          alert("Failed: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Request failed: " + err.message);
+      }
+    }
+
+    window.onload = loadStudents;
+  </script>
+
+  <button onclick="changePassword()">Change Password</button>
 </body>
 </html>

@@ -315,11 +315,7 @@
 </html>
  -->
 
-
-
-
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -353,6 +349,47 @@
     .cancel-btn:hover { background-color: #494f54; }
     input, select { font-size: 14px; padding: 5px; width: 100%; box-sizing: border-box; }
     .button-container { margin-bottom: 15px; }
+    /* fine */
+    /* Make table responsive */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent long text from breaking layout */
+td, th {
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 150px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  th, td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  /* Force actions column buttons to stack */
+  td button, td a {
+    display: block;
+    margin: 4px 0;
+    width: 100%;
+    font-size: 12px;
+  }
+
+  /* Make table take full width */
+  table {
+    display: block;
+    width: 100%;
+  }
+
+  /* Reduce header text size */
+  th {
+    font-size: 13px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -370,6 +407,7 @@
     <button onclick="generateStudentPassword()">Generate Password (Students)</button>
   </div>
 
+  <div class="table-container">
   <table>
     <thead>
       <tr>
@@ -382,6 +420,8 @@
     </thead>
     <tbody id="studentsTableBody"></tbody>
   </table>
+</div>
+
 
   <br><br>
   <a href="/api/logout" 

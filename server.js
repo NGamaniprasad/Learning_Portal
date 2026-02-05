@@ -32,7 +32,7 @@ mongoose.connect(process.env.MONGO_URI)
 //   resave: false,
 //   saveUninitialized: false
 // }));
-const MongoStore = require('connect-mongo');
+//const MongoStore = require('connect-mongo');
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secret123',

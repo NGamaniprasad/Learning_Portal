@@ -27,21 +27,21 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // Session setup -- im changed 
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false
-// }));
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
 //const MongoStore = require('connect-mongo');
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret123',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI
-  })
-}));
+// app.use(session({
+//   secret: process.env.SESSION_SECRET || 'secret123',
+//   resave: false,
+//   saveUninitialized: false,
+//   store: MongoStore.create({
+//     mongoUrl: process.env.MONGO_URI
+//   })
+// }));
 
 // Middleware
 app.use(cors());

@@ -210,8 +210,10 @@ app.delete("/students/:id", async (req, res) => {
 });
 // ------------------ EMAIL SENDING ------------------
 
-const GMAIL_USER = 'grownbyaigp@gmail.com';
-const GMAIL_PASS = 'acva yztf xwdx jbnv'; // Gmail App Password
+// const GMAIL_USER = '';
+// const GMAIL_PASS = ''; // Gmail App Password
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PASS = process.env.GMAIL_PASS;
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
